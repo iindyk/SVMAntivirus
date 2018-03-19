@@ -30,6 +30,7 @@ public class SQLiteConnection {
         try {
             if (conn != null) {
                 conn.close();
+                LOGGER.log( Level.INFO,"Connection to SQLite has been closed.");
             }
         }
         catch (SQLException e) {
@@ -63,7 +64,6 @@ public class SQLiteConnection {
             try{
                 statement.close();
                 resultSet.close();
-                LOGGER.log( Level.INFO,"Connection to SQLite has been closed.");
             }
             catch (SQLException e){
                 LOGGER.log( Level.SEVERE, e.toString(), e);
@@ -74,17 +74,5 @@ public class SQLiteConnection {
 
     public static void main(String[] args) {
 
-        SQLiteConnection connection = SQLiteConnection.getInstance();
-        ResTuple res = connection.exec("select * from weights;");
-        try{
-            while (res.resultSet.next()){
-                System.out.println(res.resultSet.getString("command"));
-            }
-            res.close();
-            connection.close();
-        }
-        catch (SQLException e){
-            LOGGER.log( Level.SEVERE, e.toString(), e);
-        }
     }
 }

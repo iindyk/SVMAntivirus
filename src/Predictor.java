@@ -1,5 +1,7 @@
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.DoubleStream;
 
@@ -9,12 +11,28 @@ public class Predictor {
 
     private static Predictor instance = null;
 
-    private ArrayList<Double> weights; //linear classifier weights
+    private ArrayList<Double> weights=new ArrayList<>(); //linear classifier weights
 
-    private ArrayList<String> dictionary;   //dictionary of main opcode commands
+    private ArrayList<String> dictionary=new ArrayList<>();   //dictionary of main opcode commands
 
     private Predictor(){
-        //todo
+        SQLiteConnection connection = SQLiteConnection.getInstance();
+        SQLiteConnection.ResTuple res = connection.exec("select * from weights;");
+
+        try{
+            while (res.resultSet.next()){
+                String comm = res.resultSet.getString("command");
+                if (!comm.equals("offset")) dictionary.add(comm);
+                weights.add(res.resultSet.getDouble("weight"));
+            }
+            res.close();
+            connection.close();
+        }
+        catch (SQLException e){
+            LOGGER.log( Level.SEVERE, e.toString(), e);
+        }
+        System.out.println(dictionary);
+        System.out.println(weights);
     }
 
     public static Predictor getInstance(){
