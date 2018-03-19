@@ -5,7 +5,7 @@ import java.awt.event.WindowEvent;
 
 public class MainWindow extends JFrame {
     public MainWindow() {
-        super("My Window");
+        super("SVM Antivirus");
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -17,8 +17,7 @@ public class MainWindow extends JFrame {
         });
 
         final JButton check_btn = new JButton("Check for viruses");
-        check_btn.addActionListener(e -> JOptionPane.showMessageDialog(MainWindow.this,
-                "Button Pressed", "Hey", JOptionPane.INFORMATION_MESSAGE));
+        check_btn.addActionListener(new PredictionActionListener());
 
         final JButton train_btn = new JButton("Train predictor");
         train_btn.addActionListener(e -> JOptionPane.showMessageDialog(MainWindow.this,
