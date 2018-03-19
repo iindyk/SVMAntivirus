@@ -56,7 +56,7 @@ public class SQLiteConnection {
         Statement statement;
         ResultSet resultSet;
 
-        public ResTuple(Statement statement, ResultSet resultSet) {
+        ResTuple(Statement statement, ResultSet resultSet) {
             this.statement = statement;
             this.resultSet = resultSet;
         }

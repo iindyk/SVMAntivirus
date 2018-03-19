@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MainWindow extends JFrame {
@@ -30,12 +32,19 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int returnVal = fc.showOpenDialog(MainWindow.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-                    //File file = fc.getSelectedFile();
-                    //This is where a real application would open the file.
-                    //log.append("Opening: " + file.getName() + "." + newline);
-                } else {
-                    //log.append("Open command cancelled by user." + newline);
+                    Predictor predictor = Predictor.getInstance();
+                    File file = fc.getSelectedFile();
+                    Boolean result = predictor.predict(file);
+                    LOGGER.log(Level.INFO, "result for file "+file.getAbsolutePath()+
+                            " is " + result);
+                    if (result) {
+                        JOptionPane.showMessageDialog(MainWindow.this,
+                                "It's a virus!", "Virus check", JOptionPane.WARNING_MESSAGE);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(MainWindow.this,
+                                "File os ok!", "Virus check", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
         });

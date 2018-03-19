@@ -43,7 +43,7 @@ public class Predictor {
 
     private String getOpcode(File file){
         //todo
-        return null;
+        return "hghgfhgfhjgfhgfhgfaddpoppush";
     }
 
     public boolean predict(File file){
