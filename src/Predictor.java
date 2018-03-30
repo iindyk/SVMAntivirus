@@ -25,14 +25,13 @@ public class Predictor {
                 if (!comm.equals("offset")) dictionary.add(comm);
                 weights.add(res.resultSet.getDouble("weight"));
             }
+            LOGGER.log(Level.INFO, "Predictor is initialized");
             res.close();
             connection.close();
         }
         catch (SQLException e){
             LOGGER.log( Level.SEVERE, e.toString(), e);
         }
-        System.out.println(dictionary);
-        System.out.println(weights);
     }
 
     public static Predictor getInstance(){
@@ -48,7 +47,6 @@ public class Predictor {
 
     public boolean predict(File file){
         String opcode = getOpcode(file);
-        assert opcode != null;
         int n = weights.size()-1;
         double[] features = new double[n];
 
