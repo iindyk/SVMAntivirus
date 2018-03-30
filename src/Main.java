@@ -1,7 +1,4 @@
-import javax.swing.*;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 public class Main {
 
