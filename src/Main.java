@@ -1,9 +1,9 @@
 import javax.swing.*;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 public class Main {
-
-    private final static Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

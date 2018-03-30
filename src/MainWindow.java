@@ -5,10 +5,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class MainWindow extends JFrame {
+
+    private JTextArea textArea = new JTextArea(20, 30);
 
     private final static Logger LOGGER = Logger.getLogger(MainWindow.class.getName());
 
@@ -16,6 +17,8 @@ public class MainWindow extends JFrame {
         super("SVM Antivirus");
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        WindowHandler logHandler = WindowHandler.getInstance(this);
+        LOGGER.addHandler(logHandler);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -57,7 +60,50 @@ public class MainWindow extends JFrame {
         setLayout(new FlowLayout());
         add(check_btn);
         add(train_btn);
+        add(new JScrollPane(textArea));
         pack();
         setLocationRelativeTo(null);
+        setSize(400, 400);
+    }
+
+    public void showInfo(String data) {
+        textArea.append(data);
+        this.validate();
+    }
+}
+
+class WindowHandler extends Handler {
+    private MainWindow window;
+
+    private static WindowHandler handler = null;
+
+    private WindowHandler(MainWindow window) {
+        LogManager manager = LogManager.getLogManager();
+        String className = this.getClass().getName();
+        String level = manager.getProperty(className + ".level");
+        setLevel(level != null ? Level.parse(level) : Level.INFO);
+        setFormatter( new SimpleFormatter());
+        this.window = window;
+    }
+
+    public static synchronized WindowHandler getInstance(MainWindow window) {
+        if (handler == null) {
+            handler = new WindowHandler(window);
+        }
+        return handler;
+    }
+
+    public synchronized void publish(LogRecord record) {
+        String message = null;
+        if (!isLoggable(record))
+            return;
+        message = getFormatter().format(record);
+        window.showInfo(message);
+    }
+
+    public void close() {
+    }
+
+    public void flush() {
     }
 }
