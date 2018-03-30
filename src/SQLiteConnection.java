@@ -19,6 +19,7 @@ public class SQLiteConnection {
 
         } catch (SQLException e) {
             LOGGER.log( Level.SEVERE, e.toString(), e);
+            LOGGER.log(Level.INFO, "Connection to SQLite was not established. Please try again");
         }
     }
 

@@ -9,6 +9,8 @@ public class Predictor {
 
     private final static Logger LOGGER = Logger.getLogger(Predictor.class.getName());
 
+    private static boolean wasConnected = false;
+
     private static Predictor instance = null;
 
     private ArrayList<Double> weights=new ArrayList<>(); //linear classifier weights
@@ -18,25 +20,31 @@ public class Predictor {
     private Predictor(){
         SQLiteConnection connection = SQLiteConnection.getInstance();
         SQLiteConnection.ResTuple res = connection.exec("select * from weights;");
-        LOGGER.addHandler(WindowHandler.getInstance());
-
         try{
             while (res.resultSet.next()){
                 String comm = res.resultSet.getString("command");
                 if (!comm.equals("offset")) dictionary.add(comm);
                 weights.add(res.resultSet.getDouble("weight"));
             }
+            wasConnected = true;
             LOGGER.log(Level.INFO, "Predictor is initialized");
             res.close();
             connection.close();
         }
         catch (SQLException e){
-            LOGGER.log( Level.SEVERE, e.toString(), e);
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+            LOGGER.log(Level.INFO,"Predictor was not initialized. Please try again");
         }
     }
 
     public static Predictor getInstance(){
-        if (instance==null) instance = new Predictor();
+        if (instance==null) {
+            instance = new Predictor();
+            LOGGER.addHandler(WindowHandler.getInstance());
+        }
+        else if (!wasConnected) {
+            instance = new Predictor();
+        }
 
         return instance;
     }
