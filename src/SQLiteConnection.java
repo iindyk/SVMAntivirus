@@ -9,6 +9,7 @@ public class SQLiteConnection {
 
     private SQLiteConnection(){
         conn = null;
+        LOGGER.addHandler(WindowHandler.getInstance());
         try {
             // db parameters
             String url = "jdbc:sqlite:/home/iindyk/IdeaProjects/SVMAntivirus/db.sqlite";

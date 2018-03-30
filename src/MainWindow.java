@@ -17,7 +17,8 @@ public class MainWindow extends JFrame {
         super("SVM Antivirus");
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        WindowHandler logHandler = WindowHandler.getInstance(this);
+        WindowHandler logHandler = WindowHandler.getInstance();
+        logHandler.setWindow(this);
         LOGGER.addHandler(logHandler);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -77,18 +78,21 @@ class WindowHandler extends Handler {
 
     private static WindowHandler handler = null;
 
-    private WindowHandler(MainWindow window) {
+    private WindowHandler() {
         LogManager manager = LogManager.getLogManager();
         String className = this.getClass().getName();
         String level = manager.getProperty(className + ".level");
         setLevel(level != null ? Level.parse(level) : Level.INFO);
         setFormatter( new SimpleFormatter());
-        this.window = window;
     }
 
-    public static synchronized WindowHandler getInstance(MainWindow window) {
+    public void setWindow(MainWindow window){
+        this.window=window;
+    }
+
+    public static synchronized WindowHandler getInstance() {
         if (handler == null) {
-            handler = new WindowHandler(window);
+            handler = new WindowHandler();
         }
         return handler;
     }

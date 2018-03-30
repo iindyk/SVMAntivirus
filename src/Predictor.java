@@ -18,6 +18,7 @@ public class Predictor {
     private Predictor(){
         SQLiteConnection connection = SQLiteConnection.getInstance();
         SQLiteConnection.ResTuple res = connection.exec("select * from weights;");
+        LOGGER.addHandler(WindowHandler.getInstance());
 
         try{
             while (res.resultSet.next()){
